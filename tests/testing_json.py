@@ -1,0 +1,1 @@
+root_route_expected_response = {"hello": "world"}

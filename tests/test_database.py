@@ -5,11 +5,11 @@ from sqlalchemy import create_engine, StaticPool
 from sqlalchemy.orm import sessionmaker
 from starlette.testclient import TestClient
 
+from src.config import get_settings
 from src.database import get_db, Base
 from src.main import app
 
-load_dotenv()
-DATABASE_URL = os.getenv('TEST_DATABASE_URL')
+DATABASE_URL = get_settings().TEST_DATABASE_URL
 engine = create_engine(DATABASE_URL, connect_args={"check_same_thread": False}, poolclass=StaticPool)
 TestingSessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
 
