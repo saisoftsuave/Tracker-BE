@@ -5,7 +5,7 @@ from sqlalchemy import create_engine, StaticPool
 from sqlalchemy.orm import sessionmaker
 from starlette.testclient import TestClient
 
-from src.config import get_settings
+from src.config import get_settings, Settings
 from src.database import get_db, Base
 from src.main import app
 
@@ -35,3 +35,17 @@ def setup_db():
 
 def teardown_db():
     Base.metadata.drop_all(bind=engine)
+
+
+def get_test_settings():
+    return Settings(
+        POSTGRES_USER="test_user",
+        POSTGRES_PASSWORD="test_password",
+        POSTGRES_DB="test_db",
+        HOST="localhost",
+        DATABASE_URL="sqlite:///./test.db",
+        TEST_DATABASE_URL="sqlite:///./test_test.db"
+    )
+
+
+# app.dependency_overrides[get_settings()] = get_test_settings()
