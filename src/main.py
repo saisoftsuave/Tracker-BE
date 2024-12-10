@@ -8,4 +8,4 @@ app = FastAPI()
 
 @app.get("/")
 async def root(db=Depends(get_db)):
-    return {"hello": "world"}
+    return {"hello": "BE"}
