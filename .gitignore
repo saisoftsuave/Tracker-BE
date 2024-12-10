@@ -1,0 +1,69 @@
+.venv
+# Byte-compiled files
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Virtual environment
+.venv/
+env/
+venv/
+
+# Distribution / Packaging
+*.egg
+*.egg-info/
+dist/
+build/
+*.whl
+
+# Testing and Coverage
+.tox/
+.nox/
+.coverage
+*.cover
+coverage.xml
+*.py,cover
+.hypothesis/
+
+# Jupyter Notebooks
+.ipynb_checkpoints/
+
+# pyenv
+.python-version
+
+# IDEs and Editors
+.vscode/
+.idea/
+*.swp
+*.swo
+*.sublime-project
+*.sublime-workspace
+
+# Logs
+*.log
+
+# dotenv environment variables
+.env
+.env.*
+*.env.bak
+
+# MyPy and other type-checking tools
+.mypy_cache/
+.dmypy.json
+.pyre/
+
+# Profiling data
+*.prof
+
+# PyInstaller
+*.manifest
+*.spec
+
+# Other Python tools
+*.pylintrc
+.pyre/
+.pytype/
+.pytest_cache/
+
+# alembic migrations cache
+migrations/versions/__pycache__/
