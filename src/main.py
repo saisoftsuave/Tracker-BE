@@ -1,4 +1,5 @@
 from contextlib import asynccontextmanager
+from uuid import uuid4
 
 from fastapi import FastAPI
 from fastapi.params import Depends
@@ -20,7 +21,7 @@ app = FastAPI(lifespan=lifespan)
 
 @app.get(Routes.ROOT_URL)
 async def root(db: Session = Depends(get_db)):
-    user = User(user_id=3, first_name="sai", last_name="babu", email_id="sai.babu@softsuave.org",
+    user = User(user_id=uuid4(), first_name="sai", last_name="babu", email_id="sai.babu@softsuave.org",
                 hashed_password="sai@123")
     db.add(user)
     db.commit()

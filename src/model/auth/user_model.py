@@ -23,10 +23,10 @@ class User(SQLModel, table=True):
     # # One-to-One relationship
     # user_team: Optional["UserTeam"] = Relationship(back_populates="user")
 
-
-class UserTeam(SQLModel, table=True):  # Associated table
-    user_id: str = Field(foreign_key="user.user_id", primary_key=True)
-    team_id: str = Field(index=True)
-
-    # # One-to-One relationship
-    # user: "User" = Relationship(back_populates="user_team")
+#
+# class UserTeam(SQLModel, table=True):  # Associated table
+#     user_id: str = Field(foreign_key="user.user_id", primary_key=True)
+#     team_id: str = Field(index=True)
+#
+#     # # One-to-One relationship
+#     # user: "User" = Relationship(back_populates="user_team")
