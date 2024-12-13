@@ -1,5 +1,6 @@
 import uuid
 from datetime import datetime
+from typing import Optional
 
 from sqlmodel import SQLModel, Field, Relationship
 
@@ -15,8 +16,17 @@ class UserProjectLink(SQLModel, table=True):
 
 
 class UserOrganisationLink(SQLModel, table=True):
+    role_id: int = Field(foreign_key="role.role_id", primary_key=True,default=1)
     user_id: uuid.UUID = Field(default=None, foreign_key="user.user_id", primary_key=True)
     organisation_id: uuid.UUID = Field(default=None, foreign_key="organisation.organisation_id", primary_key=True)
+
+
+class Role(SQLModel, table=True):
+    role_id: int = Field(default=1, primary_key=True)
+    role_name: str
+    role_description: Optional[str]
+
+
 
 
 # Organisation Model
@@ -28,7 +38,6 @@ class Organisation(SQLModel, table=True):
     users: list["User"] = Relationship(back_populates="organizations", link_model=UserOrganisationLink)
 
 
-
 # User Model
 class User(SQLModel, table=True):
     user_id: uuid.UUID = Field(default_factory=uuid.uuid4, primary_key=True)
@@ -36,7 +45,7 @@ class User(SQLModel, table=True):
     user_last_name: str
     user_email: str
     is_email_verified: bool = Field(default=False)
-
+    role_id : int = Field(foreign_key="role.role_id")
 
     comments: list["Comment"] = Relationship(back_populates="user")
     teams: list["Team"] | None = Relationship(back_populates="users", link_model=UserTeamLink)

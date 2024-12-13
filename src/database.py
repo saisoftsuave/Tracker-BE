@@ -1,15 +1,12 @@
 from sqlmodel import SQLModel
-from sqlalchemy.ext.asyncio import AsyncSession, create_async_engine, async_session, async_sessionmaker
-from sqlalchemy.orm import sessionmaker
+from sqlalchemy.ext.asyncio import AsyncSession, create_async_engine, async_sessionmaker
 
-from src.config import   get_settings
-
-Config = get_settings()
-
+from src.config import Config
 
 async_engine = create_async_engine(
     url=Config.DATABASE_URL,
-    echo=True
+    echo=True,
+
 )
 
 

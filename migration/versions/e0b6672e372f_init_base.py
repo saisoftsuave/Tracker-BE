@@ -1,8 +1,8 @@
-"""base
+"""init base
 
-Revision ID: 1bd53b47729b
+Revision ID: e0b6672e372f
 Revises: 
-Create Date: 2024-12-13 13:52:09.660203
+Create Date: 2024-12-13 16:14:47.980256
 
 """
 from typing import Sequence, Union
@@ -13,7 +13,7 @@ import sqlmodel
 
 
 # revision identifiers, used by Alembic.
-revision: str = '1bd53b47729b'
+revision: str = 'e0b6672e372f'
 down_revision: Union[str, None] = None
 branch_labels: Union[str, Sequence[str], None] = None
 depends_on: Union[str, Sequence[str], None] = None
@@ -26,13 +26,11 @@ def upgrade() -> None:
     sa.Column('organisation_name', sqlmodel.sql.sqltypes.AutoString(), nullable=False),
     sa.PrimaryKeyConstraint('organisation_id')
     )
-    op.create_table('user',
-    sa.Column('user_id', sqlmodel.sql.sqltypes.GUID(), nullable=False),
-    sa.Column('user_first_name', sqlmodel.sql.sqltypes.AutoString(), nullable=False),
-    sa.Column('user_last_name', sqlmodel.sql.sqltypes.AutoString(), nullable=False),
-    sa.Column('user_email', sqlmodel.sql.sqltypes.AutoString(), nullable=False),
-    sa.Column('is_email_verified', sa.Boolean(), nullable=False),
-    sa.PrimaryKeyConstraint('user_id')
+    op.create_table('role',
+    sa.Column('role_id', sa.Integer(), nullable=False),
+    sa.Column('role_name', sqlmodel.sql.sqltypes.AutoString(), nullable=False),
+    sa.Column('role_description', sqlmodel.sql.sqltypes.AutoString(), nullable=True),
+    sa.PrimaryKeyConstraint('role_id')
     )
     op.create_table('project',
     sa.Column('project_id', sqlmodel.sql.sqltypes.GUID(), nullable=False),
@@ -48,12 +46,15 @@ def upgrade() -> None:
     sa.ForeignKeyConstraint(['organisation_id'], ['organisation.organisation_id'], ),
     sa.PrimaryKeyConstraint('team_id')
     )
-    op.create_table('userorganisationlink',
+    op.create_table('user',
     sa.Column('user_id', sqlmodel.sql.sqltypes.GUID(), nullable=False),
-    sa.Column('organisation_id', sqlmodel.sql.sqltypes.GUID(), nullable=False),
-    sa.ForeignKeyConstraint(['organisation_id'], ['organisation.organisation_id'], ),
-    sa.ForeignKeyConstraint(['user_id'], ['user.user_id'], ),
-    sa.PrimaryKeyConstraint('user_id', 'organisation_id')
+    sa.Column('user_first_name', sqlmodel.sql.sqltypes.AutoString(), nullable=False),
+    sa.Column('user_last_name', sqlmodel.sql.sqltypes.AutoString(), nullable=False),
+    sa.Column('user_email', sqlmodel.sql.sqltypes.AutoString(), nullable=False),
+    sa.Column('is_email_verified', sa.Boolean(), nullable=False),
+    sa.Column('role_id', sa.Integer(), nullable=False),
+    sa.ForeignKeyConstraint(['role_id'], ['role.role_id'], ),
+    sa.PrimaryKeyConstraint('user_id')
     )
     op.create_table('task',
     sa.Column('task_id', sqlmodel.sql.sqltypes.GUID(), nullable=False),
@@ -62,6 +63,15 @@ def upgrade() -> None:
     sa.Column('status', sqlmodel.sql.sqltypes.AutoString(), nullable=False),
     sa.ForeignKeyConstraint(['project_id'], ['project.project_id'], ),
     sa.PrimaryKeyConstraint('task_id')
+    )
+    op.create_table('userorganisationlink',
+    sa.Column('role_id', sa.Integer(), nullable=False),
+    sa.Column('user_id', sqlmodel.sql.sqltypes.GUID(), nullable=False),
+    sa.Column('organisation_id', sqlmodel.sql.sqltypes.GUID(), nullable=False),
+    sa.ForeignKeyConstraint(['organisation_id'], ['organisation.organisation_id'], ),
+    sa.ForeignKeyConstraint(['role_id'], ['role.role_id'], ),
+    sa.ForeignKeyConstraint(['user_id'], ['user.user_id'], ),
+    sa.PrimaryKeyConstraint('role_id', 'user_id', 'organisation_id')
     )
     op.create_table('userproject',
     sa.Column('id', sqlmodel.sql.sqltypes.GUID(), nullable=False),
@@ -134,10 +144,11 @@ def downgrade() -> None:
     op.drop_table('userteam')
     op.drop_table('userprojectlink')
     op.drop_table('userproject')
-    op.drop_table('task')
     op.drop_table('userorganisationlink')
+    op.drop_table('task')
+    op.drop_table('user')
     op.drop_table('team')
     op.drop_table('project')
-    op.drop_table('user')
+    op.drop_table('role')
     op.drop_table('organisation')
     # ### end Alembic commands ###
