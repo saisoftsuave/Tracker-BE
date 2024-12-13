@@ -1,18 +1,15 @@
 from contextlib import asynccontextmanager
-from uuid import uuid4
 
 from fastapi import FastAPI
 from fastapi.params import Depends
-from sqlalchemy.orm import Session
-from sqlmodel import SQLModel
+from sqlalchemy.ext.asyncio import AsyncSession
 from src.core.routes import Routes
-from src.database import get_db, engine
-from src.model.auth.user_model import User
+from src.database import get_db, init_db
 
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
-    SQLModel.metadata.create_all(bind=engine)
+    await init_db()
     yield
 
 
@@ -20,9 +17,5 @@ app = FastAPI(lifespan=lifespan)
 
 
 @app.get(Routes.ROOT_URL)
-async def root(db: Session = Depends(get_db)):
-    user = User(user_id=uuid4(), first_name="sai", last_name="babu", email_id="sai.babu@softsuave.org",
-                hashed_password="sai@123")
-    db.add(user)
-    db.commit()
+async def root(db: AsyncSession = Depends(get_db)):
     return {"hello": "world"}
